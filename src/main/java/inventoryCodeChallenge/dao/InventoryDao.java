@@ -16,7 +16,7 @@ public class InventoryDao {
 
     private int quantity;
 
-    @ManyToMany
+    @ManyToMany()
     @JoinTable(name = "inventory_sub_category", joinColumns = @JoinColumn(name = "inventory_id"), inverseJoinColumns = @JoinColumn(name = "sub_category_id"))
     private List<SubCategoryDao> subCategories;
 

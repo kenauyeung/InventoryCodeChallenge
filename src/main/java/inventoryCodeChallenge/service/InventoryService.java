@@ -49,6 +49,9 @@ public class InventoryService {
                     String unFoundSubCategoryId = model.getSubCategories().stream().filter(id -> !subIdSet.contains(id)).map(String::valueOf).collect(Collectors.joining(","));
                     if (StringUtils.isBlank(unFoundSubCategoryId)) {
                         InventoryDao dao = repo.save(InventoryDataMapper.dataConversion(model));
+
+                        // workaround - above save does not load the category info, it must load it manually
+                        dao.setSubCategories(subCategoryRepo.findAllById(dao.getSubCategories().stream().map(SubCategoryDao::getId).collect(Collectors.toList())));
                         return InventoryDataMapper.dataConversion(dao);
                     } else {
                         errMsg = "sub category not found : " + unFoundSubCategoryId;
