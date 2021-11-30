@@ -1,13 +1,12 @@
 package inventoryCodeChallenge.service;
 
 import inventoryCodeChallenge.exception.InvalidValueException;
+import inventoryCodeChallenge.mapper.CategoryDataMapper;
 import inventoryCodeChallenge.model.CategoryModel;
 import inventoryCodeChallenge.repository.CategoryRepository;
-import inventoryCodeChallenge.mapper.CategoryDataMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -22,7 +21,7 @@ public class CategoryService {
         return repo.findAll().stream().filter(Objects::nonNull).map(CategoryDataMapper::dataConversion).collect(Collectors.toList());
     }
 
-    public CategoryModel insert(CategoryModel model) {
+    public CategoryModel insertCategory(CategoryModel model) {
         if (StringUtils.isBlank(model.getName())) {
             throw new InvalidValueException("Category name cannot be blank");
         }

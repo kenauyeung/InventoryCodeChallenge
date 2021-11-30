@@ -24,19 +24,14 @@ public class InventoryController {
         return service.getInventories();
     }
 
-    @GetMapping(path = "/{id}", consumes = "*/*")
-    public InventoryModel getInventory(@PathVariable @Min(0) @NotNull Integer id) {
-        return service.getInventories(id);
-    }
-
     @PostMapping
     public RequestResponse<InventoryModel> insert(@Valid @RequestBody InventoryInsertModel model) {
-        return new RequestResponse(RequestResponse.State.SUCCESS, null, service.insert(model));
+        return new RequestResponse(RequestResponse.State.SUCCESS, null, service.insertInventory(model));
     }
 
-    @PutMapping(path = "/{id}/{quantity}", consumes = "*/*")
-    public RequestResponse<InventoryModel> update(@PathVariable @Min(0) @NotNull Integer id, @PathVariable @Min(0) @NotNull Integer quantity) {
-        return new RequestResponse(RequestResponse.State.SUCCESS, null, service.update(id, quantity));
+    @PutMapping
+    public RequestResponse<InventoryModel> update(@Valid @RequestBody InventoryUpdateModel model) {
+        return new RequestResponse(RequestResponse.State.SUCCESS, null, service.updateInventory(model));
     }
 
     @ExceptionHandler({MissingRecordException.class})

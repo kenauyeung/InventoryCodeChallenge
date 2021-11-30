@@ -24,6 +24,6 @@ public class CategoryController {
 
     @PostMapping
     public RequestResponse<CategoryModel> insert(@Valid @RequestBody CategoryModel model) {
-        return new RequestResponse(RequestResponse.State.SUCCESS, null, service.insert(model));
+        return new RequestResponse(RequestResponse.State.SUCCESS, null, service.insertCategory(model));
     }
 }

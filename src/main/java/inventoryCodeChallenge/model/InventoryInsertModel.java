@@ -21,6 +21,11 @@ public class InventoryInsertModel {
     public InventoryInsertModel() {
     }
 
+    public InventoryInsertModel(String name, int quantity, List<Integer> subCategories) {
+        this.name = name;
+        this.quantity = quantity;
+        this.subCategories = subCategories;
+    }
 
     public String getName() {
         return name;

@@ -1,6 +1,8 @@
 package inventoryCodeChallenge.model;
 
 
+import org.apache.commons.lang3.StringUtils;
+
 public class RequestResponse<T> {
     public static enum State {
         SUCCESS,
@@ -8,7 +10,7 @@ public class RequestResponse<T> {
     }
 
     private State state;
-    private String message;
+    private String message = "";
     private T data;
 
     public RequestResponse() {
@@ -17,7 +19,7 @@ public class RequestResponse<T> {
 
     public RequestResponse(State state, String message, T data) {
         this.state = state;
-        this.message = message;
+        this.message =  StringUtils.defaultIfBlank(message,"");
         this.data = data;
     }
 

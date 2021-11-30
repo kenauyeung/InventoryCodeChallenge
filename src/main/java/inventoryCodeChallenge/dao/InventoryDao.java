@@ -16,7 +16,7 @@ public class InventoryDao {
 
     private int quantity;
 
-    @ManyToMany()
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "inventory_sub_category", joinColumns = @JoinColumn(name = "inventory_id"), inverseJoinColumns = @JoinColumn(name = "sub_category_id"))
     private List<SubCategoryDao> subCategories;
 
@@ -25,9 +25,14 @@ public class InventoryDao {
     }
 
     public InventoryDao(Integer id, String name, int quantity) {
+        this(id, name, quantity, null);
+    }
+
+    public InventoryDao(Integer id, String name, int quantity, List<SubCategoryDao> subCategories) {
         this.id = id;
         this.name = name;
         this.quantity = quantity;
+        this.subCategories = subCategories;
     }
 
     public Integer getId() {

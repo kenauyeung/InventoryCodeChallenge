@@ -1,7 +1,6 @@
 package inventoryCodeChallenge.dao;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "sub_category")
@@ -12,7 +11,7 @@ public class SubCategoryDao {
 
     private String name;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private CategoryDao category;
 
@@ -22,6 +21,12 @@ public class SubCategoryDao {
     public SubCategoryDao(Integer id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public SubCategoryDao(Integer id, String name, CategoryDao category) {
+        this.id = id;
+        this.name = name;
+        this.category = category;
     }
 
     public Integer getId() {

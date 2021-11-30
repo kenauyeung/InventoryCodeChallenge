@@ -20,6 +20,12 @@ public class SubCategoryModel {
         this.name = name;
     }
 
+    public SubCategoryModel(Integer id, String name, CategoryModel category) {
+        this.id = id;
+        this.name = name;
+        this.category = category;
+    }
+
     public Integer getId() {
         return id;
     }

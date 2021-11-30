@@ -4,6 +4,7 @@
 -- -----------------------------------------------------
 INSERT INTO `category` (`id`, `name`) VALUES (1, 'Category1');
 INSERT INTO `category` (`id`, `name`) VALUES (2, 'Category2');
+INSERT INTO `category` (`id`, `name`) VALUES (3, 'Category3');
 
 
 -- -----------------------------------------------------

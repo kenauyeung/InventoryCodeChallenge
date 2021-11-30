@@ -26,11 +26,13 @@ public class SubCategoryService {
         return repo.findAll().stream().filter(Objects::nonNull).map(SubCategoryDataMapper::dataConversion).collect(Collectors.toList());
     }
 
-    public SubCategoryModel insert(SubCategoryModel model) {
+    public SubCategoryModel insertSubCategory(SubCategoryModel model) {
         if (StringUtils.isBlank(model.getName())) {
-            throw new InvalidValueException("Category name cannot be blank");
+            throw new InvalidValueException("Sub-category name cannot be blank");
         } else if (model.getCategory() == null || model.getCategory().getId() == null) {
-            throw new InvalidValueException("Category id cannot be blank");
+            throw new InvalidValueException("category id cannot be blank");
+        }else if(model.getCategory().getId() < 0){
+            throw new InvalidValueException("category id must be a positive integer");
         }
 
         model.setId(null);

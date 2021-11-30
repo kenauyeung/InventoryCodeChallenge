@@ -7,6 +7,7 @@ import inventoryCodeChallenge.exception.MissingRecordException;
 import inventoryCodeChallenge.mapper.InventoryDataMapper;
 import inventoryCodeChallenge.model.InventoryInsertModel;
 import inventoryCodeChallenge.model.InventoryModel;
+import inventoryCodeChallenge.model.InventoryUpdateModel;
 import inventoryCodeChallenge.repository.InventoryRepository;
 import inventoryCodeChallenge.repository.SubCategoryRepository;
 import org.apache.commons.lang3.StringUtils;
@@ -14,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -32,15 +32,7 @@ public class InventoryService {
         return repo.findAll().stream().filter(Objects::nonNull).map(InventoryDataMapper::dataConversion).collect(Collectors.toList());
     }
 
-    public InventoryModel getInventories(int id) {
-        InventoryDao dao = repo.findById(id).orElse(null);
-        if (dao != null) {
-            return InventoryDataMapper.dataConversion(dao);
-        }
-        throw new MissingRecordException("Unable to find inventory with id " + id);
-    }
-
-    public InventoryModel insert(InventoryInsertModel model) {
+    public InventoryModel insertInventory(InventoryInsertModel model) {
         String errMsg = "name cannot be blank";
         if (StringUtils.isNotBlank(model.getName())) {
             if (model.getQuantity() >= 0) {
@@ -54,10 +46,10 @@ public class InventoryService {
                         dao.setSubCategories(subCategoryRepo.findAllById(dao.getSubCategories().stream().map(SubCategoryDao::getId).collect(Collectors.toList())));
                         return InventoryDataMapper.dataConversion(dao);
                     } else {
-                        errMsg = "sub category not found : " + unFoundSubCategoryId;
+                        throw new MissingRecordException("Unable to retrieve sub-category with id " + unFoundSubCategoryId);
                     }
                 } else {
-                    errMsg = "sub category cannot be empty";
+                    errMsg = "sub-category cannot be empty";
                 }
             } else {
                 errMsg = "quantity must be positive integer";
@@ -66,16 +58,21 @@ public class InventoryService {
         throw new InvalidValueException("Inventory " + errMsg);
     }
 
-    public InventoryModel update(int id, int quantity) {
-        InventoryDao dao = repo.findById(id).orElse(null);
-        if (dao != null) {
-            if (dao.getQuantity() != quantity) {
-                dao.setQuantity(Math.max(0, quantity));
-                dao = repo.save(dao);
+    public InventoryModel updateInventory(InventoryUpdateModel inventory) {
+        if (inventory.getId() != null && inventory.getId() >= 0) {
+            if (inventory.getQuantity() >= 0) {
+                InventoryDao dao = repo.findById(inventory.getId()).orElse(null);
+                if (dao != null) {
+                    if (dao.getQuantity() != inventory.getQuantity()) {
+                        dao.setQuantity(inventory.getQuantity());
+                        dao = repo.save(dao);
+                    }
+                    return InventoryDataMapper.dataConversion(dao);
+                }
+                throw new MissingRecordException("Unable to find inventory with id " + inventory.getId());
             }
-            return InventoryDataMapper.dataConversion(dao);
+            throw new InvalidValueException("Inventory quantity must be positive integer");
         }
-
-        throw new MissingRecordException("Unable to find inventory with id " + id);
+        throw new InvalidValueException("Inventory id must be positive integer");
     }
 }

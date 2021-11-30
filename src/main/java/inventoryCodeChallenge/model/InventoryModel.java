@@ -1,7 +1,7 @@
 package inventoryCodeChallenge.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InventoryModel {
     private Integer id;
@@ -10,7 +10,7 @@ public class InventoryModel {
 
     private int quantity;
 
-    private Map<Integer, InventoryCategoryModel> categories = new HashMap<>();
+    private List<InventoryCategoryModel> categories = new ArrayList();
 
     public InventoryModel() {
     }
@@ -45,11 +45,11 @@ public class InventoryModel {
         this.quantity = quantity;
     }
 
-    public Map<Integer, InventoryCategoryModel> getCategories() {
+    public List<InventoryCategoryModel> getCategories() {
         return categories;
     }
 
-    public void setCategories(Map<Integer, InventoryCategoryModel> categories) {
+    public void setCategories(List<InventoryCategoryModel> categories) {
         this.categories = categories;
     }
 
@@ -59,13 +59,18 @@ public class InventoryModel {
     }
 
     public void addCategory(Integer id, String name) {
-        if (!this.categories.containsKey(id)) {
-            this.categories.put(id, new InventoryCategoryModel(id, name));
+        InventoryCategoryModel c = getCategory(id);
+        if (c == null) {
+            this.categories.add(new InventoryCategoryModel(id, name));
         }
     }
 
+    private InventoryCategoryModel getCategory(Integer id) {
+        return this.getCategories().stream().filter(category -> category.getId() == id).findFirst().orElse(null);
+    }
+
     public void addSubCategory(Integer categoryId, Integer subCategoryId, String subCategoryName) {
-        InventoryCategoryModel tmp = this.categories.get(categoryId);
+        InventoryCategoryModel tmp = getCategory(categoryId);
         if (tmp != null) {
             tmp.addSubCategory(subCategoryId, subCategoryName);
         } else {
@@ -76,7 +81,7 @@ public class InventoryModel {
     public static class InventoryCategoryModel {
         private Integer id;
         private String name;
-        private Map<Integer, String> subCategory = new HashMap<>();
+        private List<InventorySubCategoryModel> subCategory = new ArrayList();
 
         public InventoryCategoryModel() {
 
@@ -103,16 +108,41 @@ public class InventoryModel {
             this.name = name;
         }
 
-        public Map<Integer, String> getSubCategory() {
+        public List<InventorySubCategoryModel> getSubCategory() {
             return subCategory;
         }
 
-        public void setSubCategory(Map<Integer, String> subCategory) {
-            this.subCategory = subCategory;
+        public void addSubCategory(Integer id, String name) {
+            subCategory.add(new InventorySubCategoryModel(id, name));
+        }
+    }
+
+    public static class InventorySubCategoryModel {
+        private Integer id;
+        private String name;
+
+        public InventorySubCategoryModel() {
         }
 
-        public void addSubCategory(Integer id, String name) {
-            subCategory.put(id, name);
+        public InventorySubCategoryModel(Integer id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        public Integer getId() {
+            return id;
+        }
+
+        public void setId(Integer id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
         }
     }
 }
