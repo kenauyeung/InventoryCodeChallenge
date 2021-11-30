@@ -170,9 +170,7 @@ class SubCategoryControllerTest {
                         .content(json)
                 )
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.state").value("ERROR"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("[subCategoryModel::name::NotBlank]"));
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError());
     }
 
     @Test
@@ -192,9 +190,10 @@ class SubCategoryControllerTest {
 
     @Test
     public void insert_withNotExistCategoryId_returnErrorState() throws Exception {
-        String path = URL_PATH + "999";
-
-        String json = "{\"name\":\"\"}";
+        int categoryId = 999;
+        String path = URL_PATH + categoryId;
+        String subCategoryName = "sub-category1";
+        String json = "{\"name\":\"" + subCategoryName + "\"}";
         this.mockMvc.perform(MockMvcRequestBuilders.post(path)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
@@ -202,6 +201,6 @@ class SubCategoryControllerTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.state").value("ERROR"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("[subCategoryModel::name::NotBlank]"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Unable to find category with id " + categoryId));
     }
 }
