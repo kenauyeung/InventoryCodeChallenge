@@ -1,5 +1,6 @@
 package inventoryCodeChallenge.service;
 
+import inventoryCodeChallenge.BaseTest;
 import inventoryCodeChallenge.dao.CategoryDao;
 import inventoryCodeChallenge.dao.InventoryDao;
 import inventoryCodeChallenge.dao.SubCategoryDao;
@@ -8,11 +9,6 @@ import inventoryCodeChallenge.exception.MissingRecordException;
 import inventoryCodeChallenge.model.InventoryInsertModel;
 import inventoryCodeChallenge.model.InventoryModel;
 import inventoryCodeChallenge.model.InventoryUpdateModel;
-import inventoryCodeChallenge.repository.CategoryRepository;
-import inventoryCodeChallenge.repository.InventoryRepository;
-import inventoryCodeChallenge.repository.InventorySubCategoryRepository;
-import inventoryCodeChallenge.repository.SubCategoryRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,29 +20,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class InventoryServiceTest {
-    @Autowired
-    private InventoryRepository inventoryRepo;
-
-    @Autowired
-    private SubCategoryRepository subCategoryRepo;
-
-    @Autowired
-    private CategoryRepository categoryRepo;
-
-    @Autowired
-    private InventorySubCategoryRepository invSubCategoryRepo;
-
+class InventoryServiceTest extends BaseTest {
     @Autowired
     private InventoryService service;
 
-    @BeforeEach
-    public void beforeEach() {
-        invSubCategoryRepo.deleteAll();
-        inventoryRepo.deleteAll();
-        subCategoryRepo.deleteAll();
-        categoryRepo.deleteAll();
-    }
 
     @Test
     public void getInventories_containNoInventoryRecordInDB_returnEmptyList() {
@@ -259,7 +236,7 @@ class InventoryServiceTest {
 
         final List<SubCategoryDao> subCategoryDaoList = new ArrayList<>();
         model.getCategories().forEach(category -> {
-            category.getSubCategory().forEach(subCategory -> {
+            category.getSubCategories().forEach(subCategory -> {
                 subCategoryDaoList.add(new SubCategoryDao(subCategory.getId(), subCategory.getName(), new CategoryDao(category.getId(), category.getName())));
             });
         });

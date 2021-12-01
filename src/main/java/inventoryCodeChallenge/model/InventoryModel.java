@@ -10,7 +10,7 @@ public class InventoryModel {
 
     private int quantity;
 
-    private List<InventoryCategoryModel> categories = new ArrayList();
+    private List<InventoryCategoryModel> categories = new ArrayList<>();
 
     public InventoryModel() {
     }
@@ -66,7 +66,7 @@ public class InventoryModel {
     }
 
     private InventoryCategoryModel getCategory(Integer id) {
-        return this.getCategories().stream().filter(category -> category.getId() == id).findFirst().orElse(null);
+        return this.getCategories().stream().filter(category -> category.getId().compareTo(id) == 0).findFirst().orElse(null);
     }
 
     public void addSubCategory(Integer categoryId, Integer subCategoryId, String subCategoryName) {
@@ -81,7 +81,7 @@ public class InventoryModel {
     public static class InventoryCategoryModel {
         private Integer id;
         private String name;
-        private List<InventorySubCategoryModel> subCategory = new ArrayList();
+        private List<InventorySubCategoryModel> subCategories = new ArrayList<>();
 
         public InventoryCategoryModel() {
 
@@ -108,12 +108,12 @@ public class InventoryModel {
             this.name = name;
         }
 
-        public List<InventorySubCategoryModel> getSubCategory() {
-            return subCategory;
+        public List<InventorySubCategoryModel> getSubCategories() {
+            return subCategories;
         }
 
         public void addSubCategory(Integer id, String name) {
-            subCategory.add(new InventorySubCategoryModel(id, name));
+            subCategories.add(new InventorySubCategoryModel(id, name));
         }
     }
 

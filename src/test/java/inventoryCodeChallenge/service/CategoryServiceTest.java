@@ -1,13 +1,9 @@
 package inventoryCodeChallenge.service;
 
+import inventoryCodeChallenge.BaseTest;
 import inventoryCodeChallenge.dao.CategoryDao;
 import inventoryCodeChallenge.exception.InvalidValueException;
 import inventoryCodeChallenge.model.CategoryModel;
-import inventoryCodeChallenge.repository.CategoryRepository;
-import inventoryCodeChallenge.repository.InventoryRepository;
-import inventoryCodeChallenge.repository.InventorySubCategoryRepository;
-import inventoryCodeChallenge.repository.SubCategoryRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,30 +14,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class CategoryServiceTest {
+class CategoryServiceTest extends BaseTest {
 
     @Autowired
     private CategoryService service;
-
-    @Autowired
-    private InventoryRepository inventoryRepo;
-
-    @Autowired
-    private SubCategoryRepository subCategoryRepo;
-
-    @Autowired
-    private CategoryRepository categoryRepo;
-
-    @Autowired
-    private InventorySubCategoryRepository invSubCategoryRepo;
-
-    @BeforeEach
-    public void beforeEach() {
-        invSubCategoryRepo.deleteAll();
-        inventoryRepo.deleteAll();
-        subCategoryRepo.deleteAll();
-        categoryRepo.deleteAll();
-    }
 
     @Test
     public void getCategories_containNoCategoryRecordInDB_returnEmptyList() {

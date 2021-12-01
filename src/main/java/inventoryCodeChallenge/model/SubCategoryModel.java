@@ -1,7 +1,5 @@
 package inventoryCodeChallenge.model;
 
-import inventoryCodeChallenge.service.CategoryService;
-
 import javax.validation.constraints.NotBlank;
 
 public class SubCategoryModel {

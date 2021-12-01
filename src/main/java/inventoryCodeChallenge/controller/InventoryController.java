@@ -2,14 +2,15 @@ package inventoryCodeChallenge.controller;
 
 import inventoryCodeChallenge.config.Constants;
 import inventoryCodeChallenge.exception.MissingRecordException;
-import inventoryCodeChallenge.model.*;
+import inventoryCodeChallenge.model.InventoryInsertModel;
+import inventoryCodeChallenge.model.InventoryModel;
+import inventoryCodeChallenge.model.InventoryUpdateModel;
+import inventoryCodeChallenge.model.RequestResponse;
 import inventoryCodeChallenge.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -20,8 +21,8 @@ public class InventoryController {
     private InventoryService service;
 
     @GetMapping(path = "/", consumes = "*/*")
-    public List<InventoryModel> getAll() {
-        return service.getInventories();
+    public RequestResponse<List<InventoryModel>> getAll() {
+        return new RequestResponse(RequestResponse.State.SUCCESS, null, service.getInventories());
     }
 
     @PostMapping

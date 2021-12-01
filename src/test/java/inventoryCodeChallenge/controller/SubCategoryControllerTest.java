@@ -1,11 +1,8 @@
 package inventoryCodeChallenge.controller;
 
+import inventoryCodeChallenge.BaseTest;
 import inventoryCodeChallenge.dao.CategoryDao;
 import inventoryCodeChallenge.dao.SubCategoryDao;
-import inventoryCodeChallenge.repository.CategoryRepository;
-import inventoryCodeChallenge.repository.InventoryRepository;
-import inventoryCodeChallenge.repository.InventorySubCategoryRepository;
-import inventoryCodeChallenge.repository.SubCategoryRepository;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,19 +22,7 @@ import org.springframework.web.context.WebApplicationContext;
 @ExtendWith(SpringExtension.class)
 @WebAppConfiguration
 @SpringBootTest
-class SubCategoryControllerTest {
-    @Autowired
-    private InventoryRepository inventoryRepo;
-
-    @Autowired
-    private SubCategoryRepository subCategoryRepo;
-
-    @Autowired
-    private CategoryRepository categoryRepo;
-
-    @Autowired
-    private InventorySubCategoryRepository invSubCategoryRepo;
-
+class SubCategoryControllerTest extends BaseTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
@@ -45,15 +30,12 @@ class SubCategoryControllerTest {
 
     private final String URL_PATH = "/subcategory/";
 
+    @Override
     @BeforeEach
     public void beforeEach() {
-        invSubCategoryRepo.deleteAll();
-        inventoryRepo.deleteAll();
-        subCategoryRepo.deleteAll();
-        categoryRepo.deleteAll();
+        super.beforeEach();
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
     }
-
 
     @Test
     public void getAll_containNoSubCategoryRecord_returnJsonWithSuccessAndEmptyCategory() throws Exception {
@@ -161,7 +143,7 @@ class SubCategoryControllerTest {
     }
 
     @Test
-    public void insert_withEmptyCategoryId_returnErrorState() throws Exception {
+    public void insert_withEmptyCategoryId_returnBadRequest() throws Exception {
         String path = URL_PATH;
 
         String json = "{\"name\":\"\"}";

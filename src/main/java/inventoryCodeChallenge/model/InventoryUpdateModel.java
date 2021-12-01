@@ -10,7 +10,7 @@ public class InventoryUpdateModel {
     private Integer id;
 
     @Min(value = 0, message = "Quantity must be a positive value")
-    private int quantity;
+    private int quantity = -1;
 
     public InventoryUpdateModel() {
     }

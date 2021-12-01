@@ -1,21 +1,22 @@
 package inventoryCodeChallenge.model;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class InventoryInsertModel {
 
-    @NotBlank(message = "Category name cannot be blank")
+    @NotBlank(message = "Inventory name cannot be blank")
+    @Length()
     private String name;
 
     @Min(value = 0, message = "Quantity must be a positive value")
-    private int quantity;
+    private int quantity = -1;
 
-    @NotEmpty(message = "sub category cannot be empty")
+    @NotEmpty(message = "Sub-category cannot be empty")
     private List<Integer> subCategories;
 
     public InventoryInsertModel() {
