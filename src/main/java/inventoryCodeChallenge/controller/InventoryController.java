@@ -20,9 +20,15 @@ public class InventoryController {
     @Autowired
     private InventoryService service;
 
-    @GetMapping(path = "/", consumes = "*/*")
+    @GetMapping(consumes = "*/*")
     public RequestResponse<List<InventoryModel>> getAll() {
         return new RequestResponse(RequestResponse.State.SUCCESS, null, service.getInventories());
+    }
+
+    @GetMapping(path = "/{inventoryId}", consumes = "*/*")
+    public RequestResponse<InventoryModel> getInventory(@PathVariable int inventoryId) {
+        InventoryModel result = inventoryId >= 0 ? service.getInventory(inventoryId) : null;
+        return new RequestResponse(RequestResponse.State.SUCCESS, null, result);
     }
 
     @PostMapping

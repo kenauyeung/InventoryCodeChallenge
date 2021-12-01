@@ -60,6 +60,26 @@ class InventoryServiceTest extends BaseTest {
     }
 
     @Test
+    public void getInventory_withInventoryIdExist_returnInventoryInfo() {
+        int quantity1 = 10, quantity2 = 20, quantity3 = 30;
+        CategoryDao category1 = categoryRepo.save(new CategoryDao(null, "Category1"));
+        SubCategoryDao subCategory1 = subCategoryRepo.save(new SubCategoryDao(null, "sub-category 1", category1));
+        InventoryDao inventoryDao1 = new InventoryDao(null, "inventory1", quantity1, Arrays.asList(subCategory1));
+
+        InventoryDao initInventory = inventoryRepo.save(inventoryDao1);
+        InventoryModel testInventory = service.getInventory(inventoryDao1.getId());
+
+        assertInventoryDao(inventoryDao1, initInventory); // test the data in db match with data in the initial object
+        assertInventoryDao(convertModelToDao(testInventory), initInventory); // test the data against the returned modal
+    }
+
+    @Test
+    public void getInventory_withInventoryIdNotExist_returnNull() {
+        InventoryModel testInventory = service.getInventory(9999);
+        assertNull(testInventory);
+    }
+
+    @Test
     public void insertInventory_withValidInventoryInfo_returnNewlyCreatedInventoryRecord() {
         int quantity1 = 10, quantity2 = 20, quantity3 = 30;
         CategoryDao category1 = categoryRepo.save(new CategoryDao(null, "Category1"));

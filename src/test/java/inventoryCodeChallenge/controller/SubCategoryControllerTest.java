@@ -38,7 +38,7 @@ class SubCategoryControllerTest extends BaseTest {
     }
 
     @Test
-    public void getAll_containNoSubCategoryRecord_returnJsonWithSuccessAndEmptyCategory() throws Exception {
+    public void getAll_containNoSubCategoryRecord_returnJsonWithSuccessAndEmptySubCategory() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.get(URL_PATH))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -51,7 +51,7 @@ class SubCategoryControllerTest extends BaseTest {
     }
 
     @Test
-    public void getAll_containsSubCategoryRecord_returnJsonWithSuccessAndCategory() throws Exception {
+    public void getAll_containsSubCategoryRecord_returnJsonWithSuccessAndSubCategory() throws Exception {
         CategoryDao category = categoryRepo.save(new CategoryDao(null, "Category1"));
         SubCategoryDao subCategory1 = subCategoryRepo.save(new SubCategoryDao(null, "subCategory1", category));
 
@@ -70,7 +70,7 @@ class SubCategoryControllerTest extends BaseTest {
     }
 
     @Test
-    public void insert_validSubCategoryInfoWithoutId_returnNewlyCreatedCategory() throws Exception {
+    public void insert_validSubCategoryInfoWithoutId_returnNewlyCreatedSubCategory() throws Exception {
         CategoryDao category = categoryRepo.save(new CategoryDao(null, "category1"));
         String path = URL_PATH + category.getId();
         String subCategoryName = "sub-category1";
@@ -90,7 +90,7 @@ class SubCategoryControllerTest extends BaseTest {
     }
 
     @Test
-    public void insert_validCategoryInfoWithId_returnNewlyCreatedCategory() throws Exception {
+    public void insert_validSubCategoryInfoWithId_returnNewlyCreatedSubCategory() throws Exception {
         int id = 99999;
         CategoryDao category = categoryRepo.save(new CategoryDao(null, "category1"));
         String path = URL_PATH + category.getId();

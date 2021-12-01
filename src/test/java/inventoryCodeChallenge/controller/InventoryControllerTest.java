@@ -42,7 +42,7 @@ class InventoryControllerTest extends BaseTest {
     }
 
     @Test
-    public void getAll_containNoInventoryRecord_returnJsonWithSuccessAndEmptyCategory() throws Exception {
+    public void getAll_containNoInventoryRecord_returnJsonWithSuccessAndEmptyInventory() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.get(URL_PATH))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -55,7 +55,7 @@ class InventoryControllerTest extends BaseTest {
     }
 
     @Test
-    public void getAll_containsInventoryRecord_returnJsonWithSuccessAndCategory() throws Exception {
+    public void getAll_containsInventoryRecord_returnJsonWithSuccessAndInventory() throws Exception {
         int quantity = 99;
         CategoryDao category = categoryRepo.save(new CategoryDao(null, "Category1"));
         SubCategoryDao subCategory1 = subCategoryRepo.save(new SubCategoryDao(null, "subCategory1", category));
@@ -76,6 +76,40 @@ class InventoryControllerTest extends BaseTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].categories[0].name").value(category.getName()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].categories[0].subCategories[0].id").value(subCategory1.getId()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].categories[0].subCategories[0].name").value(subCategory1.getName()));
+    }
+
+    @Test
+    public void getInventory_withExistInventoryId_returnJsonWithSuccessAndInventory() throws Exception {
+        int quantity = 99;
+        CategoryDao category = categoryRepo.save(new CategoryDao(null, "Category1"));
+        SubCategoryDao subCategory1 = subCategoryRepo.save(new SubCategoryDao(null, "subCategory1", category));
+        InventoryDao inventory = inventoryRepo.save(new InventoryDao(null, "inventory1", quantity, Arrays.asList(subCategory1)));
+
+        this.mockMvc.perform(MockMvcRequestBuilders.get(URL_PATH + inventory.getId()))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.state").value("SUCCESS"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(""))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data").isNotEmpty())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.id").value(inventory.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.name").value(inventory.getName()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.quantity").value(quantity))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.categories[0].id").value(category.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.categories[0].name").value(category.getName()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.categories[0].subCategories[0].id").value(subCategory1.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.categories[0].subCategories[0].name").value(subCategory1.getName()));
+    }
+
+    @Test
+    public void getInventory_withNotExistInventoryId_returnJsonWithSuccessAndEmptyData() throws Exception {
+        this.mockMvc.perform(MockMvcRequestBuilders.get(URL_PATH + "9999"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.state").value("SUCCESS"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(""))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data").isEmpty());
     }
 
     @Test

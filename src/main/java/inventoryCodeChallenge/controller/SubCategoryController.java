@@ -20,7 +20,7 @@ class SubCategoryController {
     @Autowired
     private SubCategoryService service;
 
-    @GetMapping(path = "/", consumes = "*/*")
+    @GetMapping(consumes = "*/*")
     public RequestResponse<List<SubCategoryModel>> getAll() {
         return new RequestResponse(RequestResponse.State.SUCCESS, null,service.getSubCategories());
     }

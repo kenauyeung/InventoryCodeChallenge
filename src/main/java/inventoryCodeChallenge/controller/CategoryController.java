@@ -17,7 +17,7 @@ public class CategoryController {
     @Autowired
     private CategoryService service;
 
-    @GetMapping(path = "/", consumes = "*/*")
+    @GetMapping(consumes = "*/*")
     public RequestResponse<List<CategoryModel>> getAll() {
         return new RequestResponse(RequestResponse.State.SUCCESS, null, service.getCategories());
     }

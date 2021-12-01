@@ -32,6 +32,11 @@ public class InventoryService {
         return repo.findAll().stream().filter(Objects::nonNull).map(InventoryDataMapper::dataConversion).collect(Collectors.toList());
     }
 
+    public InventoryModel getInventory(int inventoryId) {
+        InventoryDao dao = repo.findById(inventoryId).orElse(null);
+        return dao == null ? null : InventoryDataMapper.dataConversion(dao);
+    }
+
     public InventoryModel insertInventory(InventoryInsertModel model) {
         String errMsg = "name cannot be blank";
         if (StringUtils.isNotBlank(model.getName())) {
